@@ -1,0 +1,32 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: inventory-service
+  datasource:
+    url: jdbc:postgresql://localhost:5433/inventory_db
+    username: admin
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+# Configuración personalizada
+app:
+  api-key: secret-key-123
+
+# Resilience4j (Aquí es donde YAML brilla por su legibilidad)
+resilience4j:
+  circuitbreaker:
+    instances:
+      productService:
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+  timelimiter:
+    instances:
+      productService:
+        timeoutDuration: 3s
