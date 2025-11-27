@@ -22,6 +22,7 @@ El proyecto sigue el patrón **Database per Service** para garantizar el desacop
 
 ### Diagrama de Flujo de Datos
 
+```md
 ```mermaid
 graph TD
     User((Cliente)) -->|HTTP/80| NGINX[Frontend Container]
