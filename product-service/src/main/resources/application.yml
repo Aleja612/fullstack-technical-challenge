@@ -1,0 +1,23 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: product-service
+  datasource:
+    # URL interna si corres local, o nombre del servicio docker si corres en container
+    # Para desarrollo local híbrido, suele ser localhost.
+    # Docker Compose sobreescribirá esto con variables de entorno.
+    url: jdbc:postgresql://localhost:5432/products_db
+    username: admin
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+# Configuración personalizada
+app:
+  api-key: secret-key-123
