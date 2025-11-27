@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   # --- BASES DE DATOS ---
@@ -50,11 +50,19 @@ services:
       SPRING_DATASOURCE_USERNAME: admin
       SPRING_DATASOURCE_PASSWORD: password
       # URL interna de docker para comunicar servicios
-      PRODUCTS_SERVICE_URL: http://product-service:8080 
+      PRODUCTS_SERVICE_URL: http://product-service:8080
       APP_API_KEY: "secret-key-123"
     depends_on:
       - inventory-db
       - product-service
+  frontend-app:
+    build: ./frontend-app
+    container_name: ms-frontend
+    ports:
+      - "5173:80" # Mapeamos el puerto 5173 de tu PC al 80 de Nginx
+    depends_on:
+      - product-service
+      - inventory-service
 
 volumes:
   products_data:
