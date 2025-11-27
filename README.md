@@ -32,8 +32,8 @@ graph TD
         FE -->|JSON:API| PROD[MS Productos :8081]
         FE -->|JSON:API| INV[MS Inventario :8082]
         
-        INV -->|Feign Client (Sync)| PROD
-        INV -.->|Fallback| PROD
+        INV -- Feign Client (Sync) --> PROD  <-- Flecha Simple con texto
+        INV -- Fallback --> PROD
         
         PROD --> DB1[(PostgreSQL: Products)]
         INV --> DB2[(PostgreSQL: Inventory)]
