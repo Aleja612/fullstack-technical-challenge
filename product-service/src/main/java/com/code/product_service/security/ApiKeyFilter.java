@@ -1,4 +1,4 @@
-package com.code.product_service.security;
+package com.code.product_service.security; // ⚠️ OJO: Cambia el paquete según corresponda (product o inventory)
 
 import java.io.IOException;
 
@@ -16,27 +16,32 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApiKeyFilter extends OncePerRequestFilter {
 
-    @Value("${app.api-key}") // Lee del application.yml
+    @Value("${app.api-key}")
     private String validApiKey;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        // Permitir acceso libre a endpoints de documentación (Swagger) si los añades luego
-        String path = request.getRequestURI();
-        if (path.startsWith("/v3/api-docs") || path.startsWith("/swagger-ui")) {
+        // --- LOGS DE DEBUGGING (Bórralos luego) ---
+        System.out.println(">>> FILTRO EJECUTÁNDOSE PARA: " + request.getMethod() + " " + request.getRequestURI());
+        // ------------------------------------------
+
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            System.out.println(">>> ¡ES OPTIONS! DEJANDO PASAR..."); // Si no ves esto, el IF no funciona
             filterChain.doFilter(request, response);
             return;
         }
 
-        // Validación de API Key
         String requestKey = request.getHeader("X-API-KEY");
 
+        // Loguear qué clave llegó (cuidado, solo para dev local)
+        System.out.println(">>> API KEY RECIBIDA: " + requestKey);
+
         if (requestKey == null || !requestKey.equals(validApiKey)) {
+            System.out.println(">>> ⛔ BLOQUEADO POR API KEY INCORRECTA");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/vnd.api+json");
-            response.getWriter().write("{\"errors\": [{\"status\": \"401\", \"title\": \"Unauthorized\", \"detail\": \"Invalid or missing API Key\"}]}");
+            // ... resto del código de error ...
             return;
         }
 
