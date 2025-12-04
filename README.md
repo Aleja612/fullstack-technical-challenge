@@ -22,7 +22,6 @@ El proyecto sigue el patrón **Database per Service** para garantizar el desacop
 
 ### Diagrama de Flujo de Datos
 
-```mermaid
 graph TD
     User((Cliente)) -->|HTTP/80| NGINX[Frontend Container]
     NGINX --> FE[React App]
@@ -31,8 +30,8 @@ graph TD
         FE -->|JSON:API| PROD[MS Productos :8081]
         FE -->|JSON:API| INV[MS Inventario :8082]
         
-        INV -->|Feign Client (Sync)| PROD
-        INV -.->|Fallback| PROD
+        INV -- Feign Client (Sync) --> PROD  <-- Flecha Simple con texto
+        INV -- Fallback --> PROD
         
         PROD --> DB1[(PostgreSQL: Products)]
         INV --> DB2[(PostgreSQL: Inventory)]
